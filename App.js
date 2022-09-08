@@ -1,6 +1,10 @@
 //import module-module yang diberikan
 const http = require('http');
+const express=require('express');
 const fs = require('fs');
+
+const app= express();
+const port = 3000;
 
 //path ke berkas html.
 const pathAbout = './about.html';
@@ -37,4 +41,16 @@ http.createServer((req, res) => {
     }
 }).listen(3000, () => {//listen di port 3000
     console.log('Server is running on port 3000');//untuk konfirmasi bahwa web server telah berhasil dijalakan 
+})
+
+app.get('/',(req,res)=>{
+    showPage(pathIndex,res);
+})
+
+app.get('/about',(req,res)=>{
+    showPage(pathAbout,res);
+})
+
+app.get('/contact',(req,res)=>{
+    showPage(pathContact,res);
 })
