@@ -1,6 +1,23 @@
 const http=require('http');
 const fs = require('fs');
 
+const pathAbout = './about.html';
+const pathContact = './contact.html';
+const pathIndex = './index.html';
+
+const showPage=(path,res)=>{
+    return new Promise((resolve,reject)=>{    
+        fs.readFile(path,(err,data)=>{
+            if(err){
+                res.writeHead(404);//buat status code
+                res.write('Error: page not found');
+            }else{
+                res.write(data);
+            }
+            res.end();
+        });
+    })
+}
 http.createServer((req,res)=>{
     const url = req.url;
     console.log(url);
@@ -9,37 +26,11 @@ http.createServer((req,res)=>{
         'Content-Type': 'text/html'
     })//kalo bagian ini di bawah... ya data datadi bawah ini akan diagram pre
     if(url=='/about'){
-        fs.readFile('./about.html',(err,data)=>{
-            if(err){
-                res.writeHead(404);//buat status code
-                res.write('Error: page not found');
-            }else{
-                res.write(data);
-            }
-            res.end();
-        })
+        showPage(pathAbout,res);
     }else if(url=='/contact'){
-        fs.readFile('./contact.html',(err,data)=>{
-            if(err){
-                res.writeHead(404);//buat status code
-                res.write('Error: page not found');
-            }else{
-                res.write(data);
-            }
-            res.end();
-        })
+        showPage(pathContact,res);
     }else{
-        //iini method asinkronus... bisa pake promise...
-        fs.readFile('./index.html',(err,data)=>{
-            if(err){
-                res.writeHead(404);//buat status code
-                res.write('Error: page not found');
-            }else{            
-                res.write(data);
-            }
-            res.end();
-        })
-        //res.end();ini cukup sekali aja.. gak usah berkali-kali.
+        showPage(pathIndex,res);
     }
 }).listen(3000,()=>{
     console.log('Server is running on port 3000');
